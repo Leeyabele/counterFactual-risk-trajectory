@@ -1,13 +1,15 @@
 # Counterfactual Risk Trajectory Modelling
 
+> Modelling patient deterioration as a temporal trajectory problem to understand how intervention timing shapes risk outcomes.
+
 ## Overview
 
 This project simulates patient deterioration trajectories and evaluates how the timing of clinical interventions influences cumulative risk over time.
 
-Rather than focusing on static risk scoring, the aim is to explore risk as a temporal process, and to examine how intervention timing alters downstream patient trajectories.
+Rather than treating risk as a static score, the aim is to explore risk as a temporal process, and to examine how intervention timing alters downstream patient trajectories.
 
 The project provides a simple but extensible framework for:
-
+ 
 - generating synthetic patient time series data  
 - modelling physiological instability  
 - simulating interventions at different time points  
@@ -15,13 +17,17 @@ The project provides a simple but extensible framework for:
 
 ---
 
+## Project Pipeline
+
+![Clinical Risk Pipeline](assets/pipeline.png)
+
 ## Motivation
 
 In many clinical settings, decisions are made based on snapshot observations, despite deterioration being inherently dynamic.
 
 This project explores a central question:
 
-**To what extent does earlier intervention reduce the cumulative burden of patient risk over time**
+**To what extent does earlier intervention reduce the cumulative burden of patient risk over time?**
 
 By simulating trajectories under different intervention timings, the model approximates how delays in action may translate into increased patient instability.
 
@@ -85,12 +91,22 @@ Average cumulative risk across deteriorating patients:
 
 | Scenario | Mean Risk | Standard Deviation | Reduction vs No Intervention |
 |---------|----------|-------------------|------------------------------|
-| No Intervention | 42.94 | 60.40 | 0.00 percent |
-| Early | 30.08 | 52.12 | 29.96 percent |
-| Standard | 32.45 | 54.82 | 24.43 percent |
-| Late | 35.31 | 57.31 | 17.78 percent |
+| No Intervention | 42.94 | 60.40 | 0.00%                        |
+| Early | 30.08 | 52.12 | 29.96%                       |
+| Standard | 32.45 | 54.82 | 24.43%                       |
+| Late | 35.31 | 57.31 | 17.78%                       |
 
 ---
+
+## Key Insight
+
+Earlier intervention consistently reduces cumulative patient risk, not by changing the trajectory itself, but by shortening exposure to instability.
+
+Timing, not just detection, is a critical driver of patient outcomes.
+
+## Results Visualisation (Example Outcome Comparison)
+
+![Outcome Comparison](assets/results.png)
 
 ## Key Findings
 
@@ -151,7 +167,7 @@ counterfactual_risk_trajectory/
 ## Limitations
 
 - The risk model is a simplified linear approximation and is not clinically validated  
-- Synthetic data does not fully capture real world complexity  
+- Synthetic data does not fully capture real-world complexity
 - Interventions are modelled generically and do not reflect specific treatments  
 - Temporal dynamics are simplified and do not include external clinical factors  
 
@@ -166,6 +182,13 @@ counterfactual_risk_trajectory/
 - Extend the framework towards decision-aware modelling, where risk is adjusted based on the potential impact and preventability of intervention (e.g. integration with Preventability-Adjusted Risk concepts) 
 
 ---
+
+
+## Summary
+
+This project demonstrates that modelling deterioration as a temporal process allows for direct evaluation of intervention timing, showing that earlier action can significantly reduce cumulative patient risk.
+
+--- 
 
 ## How to Run
 
