@@ -136,6 +136,9 @@ All outputs are saved in the `outputs` directory.
 
 ```
 counterfactual_risk_trajectory/
+
+├── assets/
+│   └── pipeline.png
 │
 ├── data/
 │   ├── base_patient_data.csv
@@ -159,6 +162,7 @@ counterfactual_risk_trajectory/
 │
 ├── README.md
 └── requirements.txt
+
 ```
 
 
