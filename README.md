@@ -106,7 +106,7 @@ Timing, not just detection, is a critical driver of patient outcomes.
 
 ## Results Visualisation (Example Outcome Comparison)
 
-![Outcome Comparison](assets/results.png)
+![Outcome Comparison](outputs/outcome_by_scenario.png)
 
 ## Key Findings
 
