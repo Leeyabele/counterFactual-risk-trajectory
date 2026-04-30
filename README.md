@@ -42,6 +42,8 @@ Synthetic patient data is generated for two groups:
 - Stable patients with low variability  
 - Deteriorating patients with progressive and non-linear worsening  
 
+Each patient trajectory is simulated over a 90 day period, from Day 0 to Day 90.
+
 Each patient includes longitudinal measurements of:
 
 - heart rate  
@@ -64,12 +66,14 @@ The weighting loosely reflects prioritisation seen in early warning systems such
 
 ### 3. Intervention Simulation
 
-Each deteriorating patient is replicated into counterfactual scenarios:
+Each deteriorating patient is replicated into counterfactual scenarios within the same 90 day trajectory:
 
 - No intervention  
 - Early intervention at day 30  
 - Standard intervention at day 45  
 - Late intervention at day 60  
+
+Interventions are applied at fixed time points, and patient risk is observed until Day 90 to capture downstream effects on cumulative risk.
 
 Interventions are modelled as gradual improvements in physiological variables rather than immediate corrections.
 
