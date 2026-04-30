@@ -2,4 +2,5 @@
 __pychache__/
 *.pyc
 .idea/
-data
+src/data/
+src/outputs/

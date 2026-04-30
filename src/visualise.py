@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 # Plot stable vs deteriorating patient risk trajectories
-def plot_stable_vs_deteriorating(df):
+def plot_stable_vs_deteriorating(df, experiment_size):
     plt.figure()
 
     stable_patients = df[df["group"] == "stable"]["patient_id"].unique()[:2]
@@ -25,12 +25,12 @@ def plot_stable_vs_deteriorating(df):
     plt.xticks(range(0, 91, 5))
     plt.legend()
     plt.tight_layout()
-    plt.savefig("outputs/stable_vs_deteriorating.png")
+    plt.savefig(f"outputs/stable_vs_deteriorating_{experiment_size}.png")
     plt.close()
 
 
 # Plot no intervention versus standard intervention for one patient
-def plot_no_intervention_vs_standard_intervention(baseline_patient, standard_patient):
+def plot_no_intervention_vs_standard_intervention(baseline_patient, standard_patient, experiment_size):
     plt.figure()
 
     plt.plot(
@@ -53,7 +53,7 @@ def plot_no_intervention_vs_standard_intervention(baseline_patient, standard_pat
     plt.xticks(range(0, 91, 5))
     plt.legend()
     plt.tight_layout()
-    plt.savefig("outputs/no_intervention_vs_standard_intervention.png")
+    plt.savefig(f"outputs/no_intervention_vs_standard_intervention_{experiment_size}.png")
     plt.close()
 
 
@@ -63,6 +63,7 @@ def plot_intervention_timing_comparison(
     early_patient,
     standard_patient,
     late_patient,
+    experiment_size,
 ):
     plt.figure()
 
@@ -100,12 +101,12 @@ def plot_intervention_timing_comparison(
     plt.xticks(range(0, 91, 5))
     plt.legend()
     plt.tight_layout()
-    plt.savefig("outputs/intervention_timing_comparison.png")
+    plt.savefig(f"outputs/intervention_timing_comparison_{experiment_size}.png")
     plt.close()
 
 
 # Plot cumulative risk comparison by scenario
-def plot_outcome_by_scenario(results):
+def plot_outcome_by_scenario(results, experiment_size):
     scenarios = list(results.keys())
     values = [results[scenario]["mean"] for scenario in scenarios]
     errors = [results[scenario]["std"] for scenario in scenarios]
@@ -125,5 +126,5 @@ def plot_outcome_by_scenario(results):
     plt.ylabel("Mean Cumulative Risk")
     plt.title("Outcome by Scenario")
     plt.tight_layout()
-    plt.savefig("outputs/outcome_by_scenario.png")
+    plt.savefig(f"outputs/outcome_by_scenario_{experiment_size}.png")
     plt.close()

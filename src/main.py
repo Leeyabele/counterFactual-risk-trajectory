@@ -18,6 +18,9 @@ from visualise import (
 def main():
     print("inside main")
 
+    # Label this run so output files are saved separately
+    experiment_size = "100k"
+
     os.makedirs("data", exist_ok=True)
     os.makedirs("outputs", exist_ok=True)
 
@@ -72,18 +75,19 @@ def main():
 
     # Save summary metrics
     results_df = results_to_dataframe(results)
-    results_df.to_csv("outputs/summary_metrics.csv", index=False)
+    results_df.to_csv(f"outputs/summary_metrics_{experiment_size}.csv", index=False)
 
     # Save plots
-    plot_stable_vs_deteriorating(baseline_df)
-    plot_no_intervention_vs_standard_intervention(baseline_patient, standard_patient)
+    plot_stable_vs_deteriorating(baseline_df, experiment_size)
+    plot_no_intervention_vs_standard_intervention(baseline_patient, standard_patient, experiment_size)
     plot_intervention_timing_comparison(
         baseline_patient,
         early_patient,
         standard_patient,
         late_patient,
+        experiment_size,
     )
-    plot_outcome_by_scenario(results)
+    plot_outcome_by_scenario(results, experiment_size)
 
     print("\n--- Cumulative Risk Comparison ---")
     for scenario, metrics in results.items():

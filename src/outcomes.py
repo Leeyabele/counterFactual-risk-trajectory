@@ -22,44 +22,52 @@ def compare_scenarios(baseline_patient, early_patient, standard_patient, late_pa
 
 # Compare scenarios across all deteriorating patients
 def compare_all_patients(baseline_df, early_df, standard_df, late_df):
-
-    deteriorating_ids = baseline_df[
+    # Keep deteriorating patients only
+    baseline_det = baseline_df[
         baseline_df["group"].astype(str).str.strip().str.lower() == "deteriorating"
-    ]["patient_id"].unique()
+    ].copy()
 
-    baseline_totals = []
-    early_totals = []
-    standard_totals = []
-    late_totals = []
+    early_det = early_df[
+        early_df["group"].astype(str).str.strip().str.lower() == "deteriorating"
+    ].copy()
 
-    for pid in deteriorating_ids:
-        baseline_patient = baseline_df[baseline_df["patient_id"] == pid]
-        early_patient = early_df[early_df["patient_id"] == pid]
-        standard_patient = standard_df[standard_df["patient_id"] == pid]
-        late_patient = late_df[late_df["patient_id"] == pid]
+    standard_det = standard_df[
+        standard_df["group"].astype(str).str.strip().str.lower() == "deteriorating"
+    ].copy()
 
-        baseline_totals.append(calculate_cumulative_risk(baseline_patient))
-        early_totals.append(calculate_cumulative_risk(early_patient))
-        standard_totals.append(calculate_cumulative_risk(standard_patient))
-        late_totals.append(calculate_cumulative_risk(late_patient))
+    late_det = late_df[
+        late_df["group"].astype(str).str.strip().str.lower() == "deteriorating"
+    ].copy()
+
+    # Only positive risk contributes to cumulative burden
+    baseline_det["positive_risk"] = baseline_det["risk"].clip(lower=0)
+    early_det["positive_risk"] = early_det["risk"].clip(lower=0)
+    standard_det["positive_risk"] = standard_det["risk"].clip(lower=0)
+    late_det["positive_risk"] = late_det["risk"].clip(lower=0)
+
+    # Sum risk per patient using groupby instead of looping patient by patient
+    baseline_totals = baseline_det.groupby("patient_id")["positive_risk"].sum()
+    early_totals = early_det.groupby("patient_id")["positive_risk"].sum()
+    standard_totals = standard_det.groupby("patient_id")["positive_risk"].sum()
+    late_totals = late_det.groupby("patient_id")["positive_risk"].sum()
 
     results = {
         "No Intervention": {
-            "mean": np.mean(baseline_totals),
-            "std": np.std(baseline_totals),
+            "mean": baseline_totals.mean(),
+            "std": baseline_totals.std(),
             "pct_reduction_vs_no_intervention": 0.0,
         },
         "Early": {
-            "mean": np.mean(early_totals),
-            "std": np.std(early_totals),
+            "mean": early_totals.mean(),
+            "std": early_totals.std(),
         },
         "Standard": {
-            "mean": np.mean(standard_totals),
-            "std": np.std(standard_totals),
+            "mean": standard_totals.mean(),
+            "std": standard_totals.std(),
         },
         "Late": {
-            "mean": np.mean(late_totals),
-            "std": np.std(late_totals),
+            "mean": late_totals.mean(),
+            "std": late_totals.std(),
         },
     }
 

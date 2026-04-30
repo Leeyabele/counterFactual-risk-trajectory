@@ -52,7 +52,7 @@ def generate_patient_trajectory(patient_id, days, group):
 
 # Generate full dataset with equal split:
 # 50% stable, 50% deteriorating patients
-def generate_dataset(n_patients=50, days=90):
+def generate_dataset(n_patients=100000, days=90):
     all_data = []
 
     for i in range(n_patients):
