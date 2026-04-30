@@ -102,6 +102,28 @@ Average cumulative risk across deteriorating patients:
 
 ---
 
+### Scaling and Robustness
+
+To evaluate the stability of the model, simulations were conducted across increasing cohort sizes:
+
+- n = 50 (proof of concept)  
+- n = 50,000 (stability)  
+- n = 100,000 (robustness)  
+
+Across all cohort sizes, the relative reduction in cumulative risk remained consistent:
+
+- Early intervention: approximately 29–30% reduction  
+- Standard intervention: approximately 23–24% reduction  
+- Late intervention: approximately 16–18% reduction  
+
+This consistency indicates that the observed effects are driven by the underlying model structure rather than sampling variability, supporting the robustness of the simulation framework.
+
+Visualisations presented are based on the largest cohort (n = 100,000) for clarity, with smaller cohorts demonstrating equivalent directional behaviour.
+
+As the data are synthetic and the model deterministic in structure, variability is constrained, which contributes to the stability of observed effects.
+
+---
+
 ## Key Insight
 
 Earlier intervention consistently reduces cumulative patient risk, not by changing the trajectory itself, but by shortening exposure to instability.
@@ -110,7 +132,7 @@ Timing, not just detection, is a critical driver of patient outcomes.
 
 ## Results Visualisation (Example Outcome Comparison)
 
-![Outcome Comparison](outputs/outcome_by_scenario.png)
+![Outcome Comparison](outputs/outcome_by_scenario_100k.png)
 
 ## Key Findings
 
@@ -149,11 +171,13 @@ counterfactual_risk_trajectory/
 │   └── scenario_data.csv
 │
 ├── outputs/
-│   ├── stable_vs_deteriorating.png
-│   ├── no_intervention_vs_standard_intervention.png
-│   ├── intervention_timing_comparison.png
-│   ├── outcome_by_scenario.png
-│   └── summary_metrics.csv
+│   ├── stable_vs_deteriorating_100k.png
+│   ├── no_intervention_vs_standard_intervention_100k.png
+│   ├── intervention_timing_comparison_100k.png
+│   ├── outcome_by_scenario_100k.png
+│   ├── summary_metrics_50.csv
+│   ├── summary_metrics_50k.csv
+│   └── summary_metrics_100k.csv
 │
 ├── src/
 │   ├── generate_data.py
