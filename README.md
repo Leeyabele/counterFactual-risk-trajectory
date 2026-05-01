@@ -130,6 +130,20 @@ Earlier intervention consistently reduces cumulative patient risk, not by changi
 
 Timing, not just detection, is a critical driver of patient outcomes.
 
+### Preventability Adjusted Risk (PAR)
+
+To extend the analysis beyond cumulative risk, a Preventability Adjusted Risk (PAR) metric was introduced.
+
+PAR is defined as the proportion of cumulative risk reduced under early intervention relative to no intervention:
+
+PAR = (Risk_no_intervention − Risk_early) / Risk_no_intervention
+
+Across the largest cohort (n = 100,000), the mean PAR was approximately 0.49, indicating that nearly half of the model-derived cumulative risk in deteriorating patients is modifiable through earlier intervention.
+
+This highlights an important distinction between predicted risk and modifiable risk, demonstrating that not all observed risk is equally preventable and that intervention timing plays a critical role in determining the extent of achievable risk reduction.
+
+As PAR is derived from a simulation-based framework, it reflects model-dependent modifiability rather than causal effect estimation.
+
 ## Results Visualisation (Example Outcome Comparison)
 
 ![Outcome Comparison](outputs/outcome_by_scenario_100k.png)
