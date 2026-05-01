@@ -1,5 +1,7 @@
 # Counterfactual Risk Trajectory Modelling
 
+A simulation framework for temporal risk modelling and intervention timing analysis
+
 > Modelling patient deterioration as a temporal trajectory problem to understand how intervention timing shapes risk outcomes.
 
 ## Overview
@@ -13,7 +15,9 @@ The project provides a simple but extensible framework for:
 - generating synthetic patient time series data  
 - modelling physiological instability  
 - simulating interventions at different time points  
-- comparing counterfactual outcomes across scenarios  
+- comparing counterfactual outcomes across scenarios
+
+Although demonstrated using synthetic data, the framework is designed to be compatible with observational healthcare datasets and can be extended to OMOP CDM structured data environments.
 
 ---
 
@@ -31,6 +35,8 @@ This project explores a central question:
 
 By simulating trajectories under different intervention timings, the model approximates how delays in action may translate into increased patient instability.
 
+Understanding the temporal impact of delayed intervention is particularly relevant for early warning systems and escalation protocols in hospital settings.
+
 ---
 
 ## Methodology
@@ -41,6 +47,8 @@ Synthetic patient data is generated for two groups:
 
 - Stable patients with low variability  
 - Deteriorating patients with progressive and non-linear worsening  
+
+Synthetic data are used to isolate temporal dynamics and intervention effects in a controlled setting; however, the framework is structured to allow substitution with real-world longitudinal patient data.
 
 Each patient trajectory is simulated over a 90 day period, from Day 0 to Day 90.
 
@@ -93,12 +101,16 @@ This acts as a proxy for total patient instability and overall burden of deterio
 
 Average cumulative risk across deteriorating patients:
 
-| Scenario | Mean Risk | Standard Deviation | Reduction vs No Intervention |
-|---------|----------|-------------------|------------------------------|
-| No Intervention | 42.94 | 60.40 | 0.00%                        |
-| Early | 30.08 | 52.12 | 29.96%                       |
-| Standard | 32.45 | 54.82 | 24.43%                       |
-| Late | 35.31 | 57.31 | 17.78%                       |
+| Scenario        | Mean Cumulative Risk | Standard Deviation | Reduction vs No Intervention |
+|-----------------|----------------------|--------------------|------------------------------|
+| No Intervention | 47.64                | 58.76              | 0.00%                        |
+| Early           | 33.42                | 49.45              | 29.85%                       |
+| Standard        | 36.19                | 52.18              | 24.03%                       |
+| Late            | 39.68                | 54.97              | 16.72%                       |
+
+Across the largest cohort (n = 100,000), the mean PAR was approximately 0.50.
+
+Values shown correspond to a single simulation run (n = 100,000); minor variation may occur across repeated runs due to stochastic data generation.
 
 ---
 
@@ -126,7 +138,7 @@ As the data are synthetic and the model deterministic in structure, variability 
 
 ## Key Insight
 
-Earlier intervention consistently reduces cumulative patient risk, not by changing the trajectory itself, but by shortening exposure to instability.
+Earlier intervention consistently reduces cumulative patient risk by shortening exposure to physiological instability, even when the underlying deterioration trajectory remains unchanged.
 
 Timing, not just detection, is a critical driver of patient outcomes.
 
@@ -136,17 +148,29 @@ To extend the analysis beyond cumulative risk, a Preventability Adjusted Risk (P
 
 PAR is defined as the proportion of cumulative risk reduced under early intervention relative to no intervention:
 
-PAR = (Risk_no_intervention − Risk_early) / Risk_no_intervention
+PAR = (Cumulative Risk_no_intervention − Cumulative Risk_early) / Cumulative Risk_no_intervention
 
-Across the largest cohort (n = 100,000), the mean PAR was approximately 0.49, indicating that nearly half of the model-derived cumulative risk in deteriorating patients is modifiable through earlier intervention.
+PAR is calculated at the patient level and summarised across the cohort.
 
-This highlights an important distinction between predicted risk and modifiable risk, demonstrating that not all observed risk is equally preventable and that intervention timing plays a critical role in determining the extent of achievable risk reduction.
+Across the largest cohort (n = 100,000), the mean PAR was approximately 0.50, indicating that approximately half of the model-derived cumulative risk in deteriorating patients is modifiable under earlier intervention within the simulation framework.
+
+This highlights an important distinction between predicted risk and modifiable risk, demonstrating that not all observed risk in this simulation is equally preventable and that intervention timing plays a critical role in determining the extent of achievable risk reduction.
 
 As PAR is derived from a simulation-based framework, it reflects model-dependent modifiability rather than causal effect estimation.
 
-## Results Visualisation (Example Outcome Comparison)
+This metric provides a model-based estimate of modifiable risk and is intended as an exploratory analytical construct rather than a causal measure.
+
+---
+
+## Results Visualisation 
+
+### Outcome Comparison (Population Level)
 
 ![Outcome Comparison](outputs/outcome_by_scenario_100k.png)
+
+### Intervention Timing (Single Patient Example)
+
+![Intervention Timing](outputs/intervention_timing_comparison_100k.png)
 
 ## Key Findings
 
@@ -169,6 +193,8 @@ The project generates the following visualisations:
 - population level outcome comparisons  
 
 All outputs are saved in the `outputs` directory.
+
+PAR metrics are included within the summary_metrics output files.
 
 ---
 
@@ -216,6 +242,7 @@ counterfactual_risk_trajectory/
 - Synthetic data does not fully capture real-world complexity
 - Interventions are modelled generically and do not reflect specific treatments  
 - Temporal dynamics are simplified and do not include external clinical factors  
+- The framework has not yet been validated using real-world observational data (e.g. OMOP CDM), and findings should be interpreted as simulation-based insights rather than empirical estimates.
 
 ---
 
@@ -233,6 +260,12 @@ counterfactual_risk_trajectory/
 ## Summary
 
 This project demonstrates that modelling deterioration as a temporal process allows for direct evaluation of intervention timing, showing that earlier action can significantly reduce cumulative patient risk.
+
+The inclusion of Preventability Adjusted Risk extends the framework by distinguishing between observed and modifiable risk within a temporal modelling context.
+
+This framework illustrates how temporal modelling and counterfactual simulation can move beyond static risk prediction towards understanding when risk is modifiable, providing a foundation for decision aware clinical risk modelling.
+
+The framework is designed to support future integration with observational health data pipelines, enabling evaluation of intervention timing within real-world clinical settings.
 
 --- 
 

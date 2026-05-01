@@ -51,6 +51,13 @@ def compare_all_patients(baseline_df, early_df, standard_df, late_df):
     standard_totals = standard_det.groupby("patient_id")["positive_risk"].sum()
     late_totals = late_det.groupby("patient_id")["positive_risk"].sum()
 
+    # Calculate Preventability Adjusted Risk per patient
+    # PAR shows the proportion of cumulative risk reduced by early intervention
+    par_values = (baseline_totals - early_totals) / baseline_totals
+
+    # Replace invalid values caused by division by zero
+    par_values = par_values.replace([np.inf, -np.inf], np.nan).dropna()
+
     results = {
         "No Intervention": {
             "mean": baseline_totals.mean(),
@@ -68,6 +75,11 @@ def compare_all_patients(baseline_df, early_df, standard_df, late_df):
         "Late": {
             "mean": late_totals.mean(),
             "std": late_totals.std(),
+        },
+        "PAR": {
+            "mean": par_values.mean(),
+            "std": par_values.std(),
+            "pct_reduction_vs_no_intervention": np.nan,
         },
     }
 

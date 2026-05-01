@@ -1,6 +1,11 @@
 import os
 import numpy as np
 
+# Set project paths so files are saved to the top level folders
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+OUTPUT_DIR = os.path.join(BASE_DIR, "outputs")
+
 np.random.seed(42)
 
 from generate_data import generate_dataset, save_dataset
@@ -15,31 +20,31 @@ from visualise import (
 )
 
 
-def main():
-    print("inside main")
-
-    # Label this run so output files are saved separately
-    experiment_size = "100k"
-
-    os.makedirs("data", exist_ok=True)
-    os.makedirs("outputs", exist_ok=True)
+def run_experiment(experiment_size, n_patients):
+    print(f"\nRunning experiment: {experiment_size}")
 
     # Generate base dataset
-    df = generate_dataset()
+    df = generate_dataset(n_patients=n_patients)
     print("dataset generated")
 
     # Compute baseline risk
     baseline_df = calculate_risk(df)
 
-    # Save base data
-    save_dataset(baseline_df, "data/base_patient_data.csv")
+    # Save base data with experiment label
+    save_dataset(
+        baseline_df,
+        os.path.join(DATA_DIR, f"base_patient_data_{experiment_size}.csv")
+    )
 
-    # Run experiments
+    # Run intervention experiments
     early_df, standard_df, late_df = run_timing_experiments(df)
 
-    # Save full scenario data
+    # Save full scenario data with experiment label
     scenario_df = build_scenario_data(baseline_df, early_df, standard_df, late_df)
-    save_dataset(scenario_df, "data/scenario_data.csv")
+    save_dataset(
+        scenario_df,
+        os.path.join(DATA_DIR, f"scenario_data_{experiment_size}.csv")
+    )
 
     print("\nUnique group values:")
     print(baseline_df["group"].unique())
@@ -73,13 +78,20 @@ def main():
         late_df,
     )
 
-    # Save summary metrics
+    # Save summary metrics with experiment label
     results_df = results_to_dataframe(results)
-    results_df.to_csv(f"outputs/summary_metrics_{experiment_size}.csv", index=False)
+    results_df.to_csv(
+        os.path.join(OUTPUT_DIR, f"summary_metrics_{experiment_size}.csv"),
+        index=False
+    )
 
-    # Save plots
+    # Save plots with experiment label
     plot_stable_vs_deteriorating(baseline_df, experiment_size)
-    plot_no_intervention_vs_standard_intervention(baseline_patient, standard_patient, experiment_size)
+    plot_no_intervention_vs_standard_intervention(
+        baseline_patient,
+        standard_patient,
+        experiment_size
+    )
     plot_intervention_timing_comparison(
         baseline_patient,
         early_patient,
@@ -91,12 +103,38 @@ def main():
 
     print("\n--- Cumulative Risk Comparison ---")
     for scenario, metrics in results.items():
-        print(
-            f"{scenario}: "
-            f"mean={metrics['mean']:.2f}, "
-            f"std={metrics['std']:.2f}, "
-            f"reduction_vs_no_intervention={metrics['pct_reduction_vs_no_intervention']:.2f}%"
-        )
+        if scenario == "PAR":
+            print(
+                f"{scenario}: "
+                f"mean={metrics['mean']:.2f}, "
+                f"std={metrics['std']:.2f}"
+            )
+        else:
+            print(
+                f"{scenario}: "
+                f"mean={metrics['mean']:.2f}, "
+                f"std={metrics['std']:.2f}, "
+                f"reduction_vs_no_intervention={metrics['pct_reduction_vs_no_intervention']:.2f}%"
+            )
+
+
+def main():
+    print("inside main")
+
+    # Create output folders at the top level of the project
+    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Define all experiment sizes
+    experiment_sizes = {
+        "50": 50,
+        "50k": 50000,
+        "100k": 100000,
+    }
+
+    # Run all experiments
+    for experiment_size, n_patients in experiment_sizes.items():
+        run_experiment(experiment_size, n_patients)
 
 
 if __name__ == "__main__":
